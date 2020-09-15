@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Gitgraph, Orientation } from "@gitgraph/react";
-import { GitgraphUserApi } from "@gitgraph/core";
+import { Gitgraph } from "@gitgraph/react";
 import {
   Flex,
   Button,
@@ -18,7 +17,7 @@ import {
   Select,
 } from "@chakra-ui/core";
 import { UseDisclosureReturn } from "@chakra-ui/core/dist/useDisclosure";
-import { useGitContext } from "./context/git";
+import { useGitContext, CreateBranchModalData } from "./context/git";
 import { useForm } from "react-hook-form";
 
 export default function App() {
@@ -28,27 +27,6 @@ export default function App() {
   const initialRef = React.useRef<HTMLInputElement>();
   const finalRef = React.useRef<HTMLInputElement>(null);
 
-  // const getGraph = (
-  //   gitgraph: GitgraphUserApi<React.ReactElement<SVGElement>>
-  // ) => {
-  //   branches.forEach((branch) => {
-  //     const createdBranch = gitgraph.branch(branch);
-
-  //     const branchCommits = commits[branch];
-
-  //     if (!branchCommits) {
-  //       createdBranch.commit("feature: first commit");
-  //       return;
-  //     }
-
-  //     branchCommits.forEach((commitMessages) =>
-  //       createdBranch.commit(commitMessages)
-  //     );
-  //   });
-
-  //   return gitgraph;
-  // };
-
   return (
     <Flex m="20px">
       <Flex>
@@ -56,7 +34,7 @@ export default function App() {
           Criar branch
         </Button>
       </Flex>
-      <Gitgraph key={0} graph={graph} />
+      <Gitgraph graph={graph} />
       {isOpen && (
         <Modal
           initialFocusRef={initialRef as React.RefObject<HTMLInputElement>}
@@ -71,43 +49,31 @@ export default function App() {
   );
 }
 
-type CreateBranchModalData = {
-  branchName: string;
-  baseBranch: string;
-};
-
 function CreateBranchModal({
   onClose,
   initialRef,
 }: {
   initialRef: React.MutableRefObject<HTMLInputElement | undefined>;
 } & Pick<UseDisclosureReturn, "onClose">) {
-  const { graphAPI, graph } = useGitContext();
-  const { handleSubmit, register } = useForm<CreateBranchModalData>();
+  const { graph, createBranch } = useGitContext();
+  const { handleSubmit, register, reset } = useForm<CreateBranchModalData>();
 
-  const onSubmit = handleSubmit(async ({ branchName, baseBranch }) => {
-    if (!branchName) return;
+  const onSubmit = handleSubmit(
+    async ({ branchName, baseBranch, firstCommitMessage }) => {
+      createBranch({ branchName, baseBranch, firstCommitMessage });
 
-    if (baseBranch) {
-      graphAPI
-        .branch(baseBranch)
-        .branch(branchName)
-        .commit("feature/first commit!");
-    } else {
-      graphAPI.branch(branchName).commit("feature/first commit!");
+      reset();
     }
-
-    onClose();
-  });
+  );
 
   return (
     <>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create a branch</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-          <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit}>
+          <ModalHeader>Create a branch</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
             <FormControl>
               <FormLabel htmlFor="branchName">Branch Name</FormLabel>
               <Input
@@ -134,15 +100,26 @@ function CreateBranchModal({
                 ))}
               </Select>
             </FormControl>
-          </form>
-        </ModalBody>
+            <FormControl>
+              <FormLabel htmlFor="firstCommitMessage">
+                First Commit Message
+              </FormLabel>
+              <Input
+                name="firstCommitMessage"
+                id="firstCommitMessage"
+                defaultValue="feature/first commit message"
+                ref={register}
+              />
+            </FormControl>
+          </ModalBody>
 
-        <ModalFooter>
-          <Button variantColor="blue" mr={3} type="submit" onClick={onSubmit}>
-            Create
-          </Button>
-          <Button onClick={onClose}>Cancel</Button>
-        </ModalFooter>
+          <ModalFooter>
+            <Button variantColor="blue" mr={3} onClick={onSubmit} type="submit">
+              Create
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </form>
       </ModalContent>
     </>
   );
