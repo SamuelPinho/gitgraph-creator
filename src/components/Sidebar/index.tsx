@@ -31,7 +31,7 @@ export const Sidebar = ({ setModalName, onOpen }: SidebarProps) => {
           }}
           variantColor="green"
         >
-          Criar branch
+          Create Branch
         </Button>
       </Flex>
       {selectedCommit && (
