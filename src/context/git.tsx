@@ -15,6 +15,7 @@ import {
 } from "@gitgraph/core";
 
 export type ReactSvgElement = React.ReactElement<SVGElement>;
+export type CommitType = Commit<ReactSvgElement>;
 
 export type CreateBranchModalData = {
   branchName: string;
@@ -33,7 +34,7 @@ export type MergeBranchModalData = {
 type GitState = {
   graph: GitgraphCore<ReactSvgElement>;
   graphAPI: GitgraphUserApi<ReactSvgElement>;
-  selectedCommit: Commit<ReactSvgElement> | undefined;
+  selectedCommit: CommitType | undefined;
 
   createBranch: (attrs: CreateBranchModalData) => void;
   createCommit: (attrs: AddComitToBranchModalData) => void;
@@ -73,9 +74,7 @@ const resetElement = (element: HTMLElement, color: string) => {
   element.style.strokeWidth = "0";
 };
 
-const getCommitElement = (
-  hash: Commit<ReactSvgElement>["hash"]
-): HTMLElement | null => {
+const getCommitElement = (hash: CommitType["hash"]): HTMLElement | null => {
   const elementId = hash;
   const element = document.getElementById(elementId);
 
@@ -87,7 +86,7 @@ const getCommitElement = (
 const GitProvider = ({ children }: GitProviderProps) => {
   const graphAPI = graph.getUserApi();
   const [selectedCommit, setSelectedCommit] = useState<
-    Commit<ReactSvgElement> | undefined
+    CommitType | undefined
   >();
   const [prevColor, setPrevColor] = useState<string | undefined>();
   const [_, setPrevHash] = useState<string | undefined>();
@@ -121,7 +120,7 @@ const GitProvider = ({ children }: GitProviderProps) => {
     handleChangeDotFillColor(element, "red");
   }, [prevColor, selectedCommit]);
 
-  const handleOnClick = (commit: Commit<ReactSvgElement>) => {
+  const handleOnClick = (commit: CommitType) => {
     setSelectedCommit(commit);
   };
 

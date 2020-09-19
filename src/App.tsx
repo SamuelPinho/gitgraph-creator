@@ -34,6 +34,7 @@ import {
   MergeBranchModalData,
 } from "./context/git";
 import { useForm } from "react-hook-form";
+import { Sidebar } from "./components/Sidebar";
 
 export default function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -47,43 +48,7 @@ export default function App() {
 
   return (
     <Flex width="100%" m="20px" p="10px">
-      <Flex
-        width="100%"
-        flexDirection="column"
-        height="100%"
-        maxWidth="200px"
-        mr="3"
-      >
-        <Flex>
-          <Button
-            onClick={() => {
-              setModalName("createBranch");
-              onOpen();
-            }}
-            variantColor="green"
-          >
-            Criar branch
-          </Button>
-        </Flex>
-        {selectedCommit && (
-          <>
-            <Divider />
-            <Flex>
-              <SelectedCommitOptions
-                commit={selectedCommit}
-                openAddCommitModal={() => {
-                  setModalName("addCommit");
-                  onOpen();
-                }}
-                openMergeBranchModal={() => {
-                  setModalName("mergeBranch");
-                  onOpen();
-                }}
-              />
-            </Flex>
-          </>
-        )}
-      </Flex>
+      <Sidebar onOpen={onOpen} setModalName={setModalName} />
       <Box shadow="sm" borderRadius="md" p={2} bg="gray.200">
         <Gitgraph graph={graph} />
       </Box>
@@ -111,44 +76,6 @@ export default function App() {
     </Flex>
   );
 }
-
-const SelectedCommitOptions = ({
-  commit,
-  openAddCommitModal,
-  openMergeBranchModal,
-}: {
-  commit: Commit<ReactSvgElement>;
-  openAddCommitModal: () => void;
-  openMergeBranchModal: () => void;
-}) => {
-  const branch = commit.branches || [];
-
-  const branchName = branch[0];
-
-  return (
-    <Stack flexDirection="column" spacing={3}>
-      <Flex flexDirection="column">
-        <Text color="gray.600" fontWeight="600">
-          Selected Branch
-        </Text>
-        <Code variantColor="green" children={branchName} width="fit-content" />
-      </Flex>
-      <Flex flexDirection="column">
-        <Text color="gray.600" fontWeight="600">
-          Actions
-        </Text>
-        <Stack>
-          <Button onClick={openAddCommitModal} size="sm" variantColor="gray">
-            commit
-          </Button>
-          <Button onClick={openMergeBranchModal} size="sm" variantColor="gray">
-            merge
-          </Button>
-        </Stack>
-      </Flex>
-    </Stack>
-  );
-};
 
 const CustomRadio = React.forwardRef<
   ButtonProps,
