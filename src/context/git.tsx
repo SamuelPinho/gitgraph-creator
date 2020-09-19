@@ -91,8 +91,17 @@ const GitProvider = ({ children }: GitProviderProps) => {
   const [prevColor, setPrevColor] = useState<string | undefined>();
   const [_, setPrevHash] = useState<string | undefined>();
 
+  const handleOnClick = (commit: CommitType) => {
+    setSelectedCommit(commit);
+  };
+
   useEffect(() => {
-    graphAPI.branch("master").commit("feature/first commit message");
+    graphAPI
+      .branch("master")
+      .commit({
+        subject: "feature/first commit message",
+        onClick: handleOnClick,
+      });
   }, []);
 
   useEffect(() => {
@@ -119,10 +128,6 @@ const GitProvider = ({ children }: GitProviderProps) => {
 
     handleChangeDotFillColor(element, "red");
   }, [prevColor, selectedCommit]);
-
-  const handleOnClick = (commit: CommitType) => {
-    setSelectedCommit(commit);
-  };
 
   const createBranch = ({
     baseBranch,
