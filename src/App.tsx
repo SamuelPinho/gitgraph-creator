@@ -1,8 +1,15 @@
 import * as React from "react";
 import { Gitgraph } from "@gitgraph/react";
-import { Flex, useDisclosure, Modal, ModalOverlay, Box } from "@chakra-ui/core";
+import {
+  Flex,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  Box,
+  Grid,
+} from "@chakra-ui/core";
 import { useGitContext } from "./context/git";
-import { Sidebar } from "./components/Sidebar";
+import { BottomNavbar } from "./components/BottomNavbar";
 import { CreateBranchModal } from "./components/ModalCreateBranch";
 import { AddCommitToBranchModal } from "./components/ModalAddCommitToBranch";
 import { MergeBranchModal } from "./components/ModalMergeBranch";
@@ -18,11 +25,35 @@ export default function App() {
   const finalRef = React.useRef<HTMLInputElement>(null);
 
   return (
-    <Flex width="100%" m="20px" p="10px">
-      <Sidebar onOpen={onOpen} setModalName={setModalName} />
-      <Box shadow="sm" borderRadius="md" p={2} bg="gray.200">
-        <Gitgraph graph={graph} />
-      </Box>
+    <Grid
+      templateColumns="1fr"
+      templateRows="1fr 100px"
+      gridTemplateAreas='"graph" "bottom-navbar"'
+      minHeight="100%"
+      height="100vh "
+      width="100%"
+    >
+      <Grid area="graph" minH="0" width="100%" pos="relative">
+        <Flex p={6} minH="0" height="100%" overflowY="scroll">
+          <Gitgraph graph={graph} />
+        </Flex>
+      </Grid>
+      <Grid area="bottom-navbar" width="100%">
+        <Flex
+          height="100%"
+          width="100%"
+          bg="gray.100"
+          borderTopWidth="1px"
+          borderTopStyle="solid"
+          borderTopColor="gray.200"
+          shadow="rgba(0,0,0,0.1) 0px 0px 20px 1px, rgba(0,0,0,0.05) 0px 4px 8px 0px"
+          alignItems="center"
+          px="6"
+          py="4"
+        >
+          <BottomNavbar onOpen={onOpen} setModalName={setModalName} />
+        </Flex>
+      </Grid>
       {isOpen && (
         <Modal
           initialFocusRef={initialRef as React.RefObject<HTMLInputElement>}
@@ -44,6 +75,6 @@ export default function App() {
           )}
         </Modal>
       )}
-    </Flex>
+    </Grid>
   );
 }

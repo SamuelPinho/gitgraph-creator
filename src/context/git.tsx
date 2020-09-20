@@ -39,6 +39,7 @@ type GitState = {
   createBranch: (attrs: CreateBranchModalData) => void;
   createCommit: (attrs: AddComitToBranchModalData) => void;
   mergeBranch: (attrs: MergeBranchModalData) => void;
+  deselectCommit: () => void;
 };
 
 const GitContext = createContext<GitState | undefined>(undefined);
@@ -48,10 +49,26 @@ type GitProviderProps = {
 };
 
 const graphTemplate = templateExtend(TemplateName.Metro, {
+  colors: [
+    "#718096",
+    "#F6AD55",
+    "#48BB78",
+    "#ECC94B",
+    "#0BC5EA",
+    "#9F7AEA",
+    "#38B2AC",
+    "#ED64A6",
+  ],
+  branch: {
+    label: {
+      font: "Roboto Mono",
+    },
+  },
   commit: {
     message: {
       displayAuthor: false,
       displayHash: false,
+      font: "Roboto Mono",
     },
   },
 });
@@ -96,12 +113,10 @@ const GitProvider = ({ children }: GitProviderProps) => {
   };
 
   useEffect(() => {
-    graphAPI
-      .branch("master")
-      .commit({
-        subject: "feature/first commit message",
-        onClick: handleOnClick,
-      });
+    graphAPI.branch("master").commit({
+      subject: "first commit message",
+      onClick: handleOnClick,
+    });
   }, []);
 
   useEffect(() => {
@@ -192,6 +207,16 @@ const GitProvider = ({ children }: GitProviderProps) => {
     });
   };
 
+  const deselectCommit = () => {
+    if (!selectedCommit || !prevColor) return;
+
+    const prevElement = getCommitElement(selectedCommit.hash);
+
+    if (prevElement) resetElement(prevElement, prevColor);
+
+    setSelectedCommit(undefined);
+  };
+
   return (
     <GitContext.Provider
       value={{
@@ -201,6 +226,7 @@ const GitProvider = ({ children }: GitProviderProps) => {
         selectedCommit,
         createCommit,
         mergeBranch,
+        deselectCommit,
       }}
     >
       {children}
