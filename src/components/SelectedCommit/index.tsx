@@ -13,7 +13,9 @@ export const SelectedCommit = ({
   openAddCommitModal,
   openMergeBranchModal,
 }: SelectedCommitProps) => {
-  const { deselectCommit } = useGitContext();
+  const { deselectCommit, graph } = useGitContext();
+
+  const hasJustOneBranch = graph.branches.size === 1;
 
   const branch = commit.branches || [];
 
@@ -62,9 +64,15 @@ export const SelectedCommit = ({
           <Button onClick={openAddCommitModal} variantColor="blue" size="sm">
             add new commit
           </Button>
-          <Button onClick={openMergeBranchModal} variantColor="blue" size="sm">
-            merge
-          </Button>
+          {!hasJustOneBranch && (
+            <Button
+              onClick={openMergeBranchModal}
+              variantColor="blue"
+              size="sm"
+            >
+              merge
+            </Button>
+          )}
           <Button
             onClick={deselectCommit}
             variantColor="gray"

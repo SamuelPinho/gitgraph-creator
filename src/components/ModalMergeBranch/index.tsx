@@ -25,7 +25,11 @@ export function MergeBranchModal({
 } & Pick<UseDisclosureReturn, "onClose">) {
   const { graph, mergeBranch, selectedCommit } = useGitContext();
 
-  const branchesArray = Array.from(graph.branches.keys());
+  const originBranch = selectedCommit?.branches || "";
+
+  const branchesArray = Array.from(graph.branches.keys()).filter(
+    (branchName) => branchName !== originBranch[0]
+  );
 
   const { handleSubmit, register, reset, watch } = useForm<
     MergeBranchModalData
@@ -41,7 +45,6 @@ export function MergeBranchModal({
     reset();
   });
 
-  const originBranch = selectedCommit?.branches || "";
   const hasSelectedBranch = watch().branchToMergeName !== undefined;
 
   return (
@@ -75,13 +78,9 @@ export function MergeBranchModal({
                 defaultValue="master"
               >
                 {branchesArray.map((branchName) => (
-                  <>
-                    {originBranch[0] !== branchName && (
-                      <option key={branchName} value={branchName}>
-                        {branchName}
-                      </option>
-                    )}
-                  </>
+                  <option key={branchName} value={branchName}>
+                    {branchName}
+                  </option>
                 ))}
               </Select>
             </FormControl>
