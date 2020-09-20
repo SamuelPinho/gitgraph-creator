@@ -106,7 +106,7 @@ const GitProvider = ({ children }: GitProviderProps) => {
     CommitType | undefined
   >();
   const [prevColor, setPrevColor] = useState<string | undefined>();
-  const [_, setPrevHash] = useState<string | undefined>();
+  const [, setPrevHash] = useState<string | undefined>();
 
   const handleOnClick = (commit: CommitType) => {
     setSelectedCommit(commit);
@@ -117,6 +117,7 @@ const GitProvider = ({ children }: GitProviderProps) => {
       subject: "first commit message",
       onClick: handleOnClick,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

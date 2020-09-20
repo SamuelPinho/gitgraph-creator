@@ -5,7 +5,6 @@ import {
   useDisclosure,
   Modal,
   ModalOverlay,
-  Box,
   Grid,
 } from "@chakra-ui/core";
 import { useGitContext } from "./context/git";
