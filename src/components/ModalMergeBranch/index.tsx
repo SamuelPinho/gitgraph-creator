@@ -75,9 +75,13 @@ export function MergeBranchModal({
                 defaultValue="master"
               >
                 {branchesArray.map((branchName) => (
-                  <option key={branchName} value={branchName}>
-                    {branchName}
-                  </option>
+                  <>
+                    {originBranch[0] !== branchName && (
+                      <option key={branchName} value={branchName}>
+                        {branchName}
+                      </option>
+                    )}
+                  </>
                 ))}
               </Select>
             </FormControl>

@@ -129,16 +129,24 @@ export function CreateBranchModal({
                   ))}
                 </RadioButtonGroup>
               </FormControl>
-              <FormControl>
+              <FormControl isInvalid={!!errors.firstCommitMessage}>
                 <FormLabel htmlFor="firstCommitMessage">
                   First Commit Message
                 </FormLabel>
                 <Input
                   name="firstCommitMessage"
                   id="firstCommitMessage"
-                  defaultValue="feature/first commit message"
-                  ref={register}
+                  defaultValue="create new branch"
+                  ref={register({
+                    required: {
+                      value: true,
+                      message: "required",
+                    },
+                  })}
                 />
+                <FormErrorMessage>
+                  {errors.firstCommitMessage?.message}
+                </FormErrorMessage>
               </FormControl>
             </Stack>
           </ModalBody>
