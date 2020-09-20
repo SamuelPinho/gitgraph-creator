@@ -53,11 +53,9 @@ export function CreateBranchModal({
 
   const onSubmit = handleSubmit(
     ({ baseBranch, branchName, firstCommitMessage }) => {
-      if (!baseBranch) {
-        setError("baseBranch", {
-          message: "baseBranch cannot be null",
-        });
-      }
+      const alreadyExistBranch = branchesArray.some(
+        (branch) => branch === branchName
+      );
 
       if (branchName === baseBranch) {
         setError("branchName", {
@@ -66,6 +64,16 @@ export function CreateBranchModal({
         setError("baseBranch", {
           message: "branch name cannot be equal to base branch",
         });
+
+        return;
+      }
+
+      if (alreadyExistBranch) {
+        setError("branchName", {
+          type: "validate",
+          message: "a branch with that name already exist",
+        });
+
         return;
       }
 
