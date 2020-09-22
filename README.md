@@ -8,12 +8,11 @@ Website that aims to provide an easy way to create a git graph using [`gitgraph.
 
 ## Installing
 
-```bash
-// to download the packages
-yarn
-
-// run on localhost
-yarn start
+```
+$ git clone https://github.com/SamuelPinho/gitgraph-creator.git
+$ cd gitgraph-creator
+$ yarn
+$ yarn start
 ```
 
 ## Built with
