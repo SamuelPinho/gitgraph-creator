@@ -1,6 +1,6 @@
 {
-  "name": "gitgraph-creator",
-  "version": "0.1.0",
+  "name": "git-graph-creator",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
