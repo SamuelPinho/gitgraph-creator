@@ -33,7 +33,7 @@ export default function App() {
       width="100%"
     >
       <Grid area="graph" minH="0" width="100%" pos="relative">
-        <Flex p={6} minH="0" height="100%" overflowY="scroll">
+        <Flex p={6} minH="0" height="100%" overflowY="auto">
           <Gitgraph graph={graph} />
         </Flex>
       </Grid>
