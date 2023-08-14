@@ -75,7 +75,7 @@ export function MergeBranchModal({
                   register({ required: true })(e);
                   initialRef.current = e;
                 }}
-                defaultValue="master"
+                defaultValue="main"
               >
                 {branchesArray.map((branchName) => (
                   <option key={branchName} value={branchName}>
