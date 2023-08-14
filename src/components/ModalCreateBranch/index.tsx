@@ -34,7 +34,7 @@ export function CreateBranchModal({
   // const defaultBaseBranch = branchesArray[branchesArray.length - 1];
 
   const getDefaultBaseBranch = (commit: CommitType) => {
-    const branch = commit.branches || "master";
+    const branch = commit.branches || "main";
 
     return branch[0];
   };
