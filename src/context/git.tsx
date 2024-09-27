@@ -38,6 +38,10 @@ type GitState = {
 
   createBranch: (attrs: CreateBranchModalData) => void;
   createCommit: (attrs: AddComitToBranchModalData) => void;
+  editCommit: (attrs: {
+    commitMessage: string;
+    selectedCommit: CommitType | undefined;
+  }) => void;
   mergeBranch: (attrs: MergeBranchModalData) => void;
   deselectCommit: () => void;
 };
@@ -177,6 +181,35 @@ const GitProvider = ({ children }: GitProviderProps) => {
     }
   };
 
+  const editCommit = ({ commitMessage }: AddComitToBranchModalData) => {
+    if (!selectedCommit || !commitMessage) return;
+    if (!selectedCommit.branches) return;
+
+    const branch = graph.branches.get(selectedCommit.branches[0]);
+
+    if (!branch) return;
+
+    type wrong = { gitgraph: { commits: { subject: string }[] } };
+
+    const commits = [
+      ...graph.getRenderedData().commits.reverse(),
+    ] as unknown as {
+      hash: string;
+      subject: string;
+    }[];
+
+    commits.splice(
+      commits.findIndex((commit) => commit.hash === selectedCommit.hash),
+      1,
+      {
+        ...selectedCommit,
+        subject: commitMessage,
+      }
+    );
+
+    graphAPI.import([...commits]);
+  };
+
   const createCommit = ({ commitMessage }: AddComitToBranchModalData) => {
     if (!selectedCommit || !commitMessage) return;
     if (!selectedCommit.branches) return;
@@ -228,6 +261,7 @@ const GitProvider = ({ children }: GitProviderProps) => {
         createCommit,
         mergeBranch,
         deselectCommit,
+        editCommit,
       }}
     >
       {children}
