@@ -117,7 +117,7 @@ const GitProvider = ({ children }: GitProviderProps) => {
   };
 
   useEffect(() => {
-    graphAPI.branch("master").commit({
+    graphAPI.branch("main").commit({
       subject: "first commit message",
       onClick: handleOnClick,
     });
