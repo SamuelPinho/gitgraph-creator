@@ -6,12 +6,14 @@ type SelectedCommitProps = {
   commit: CommitType;
   openAddCommitModal: () => void;
   openMergeBranchModal: () => void;
+  openEditCommitModal: () => void;
 };
 
 export const SelectedCommit = ({
   commit,
   openAddCommitModal,
   openMergeBranchModal,
+  openEditCommitModal,
 }: SelectedCommitProps) => {
   const { deselectCommit, graph } = useGitContext();
 
@@ -73,6 +75,15 @@ export const SelectedCommit = ({
               merge
             </Button>
           )}
+          <Button
+            onClick={openEditCommitModal}
+            variantColor="gray"
+            variant="outline"
+            color="gray.500"
+            size="sm"
+          >
+            Edit
+          </Button>
           <Button
             onClick={deselectCommit}
             variantColor="gray"

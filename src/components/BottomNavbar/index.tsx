@@ -6,7 +6,7 @@ import { SelectedCommit } from "../SelectedCommit";
 type BottomNavbarProps = {
   setModalName: React.Dispatch<
     React.SetStateAction<
-      "createBranch" | "addCommit" | "mergeBranch" | undefined
+      "createBranch" | "addCommit" | "mergeBranch" | "editCommit" | undefined
     >
   >;
   onOpen: () => void;
@@ -41,6 +41,10 @@ export const BottomNavbar = ({ setModalName, onOpen }: BottomNavbarProps) => {
             }}
             openMergeBranchModal={() => {
               setModalName("mergeBranch");
+              onOpen();
+            }}
+            openEditCommitModal={() => {
+              setModalName("editCommit");
               onOpen();
             }}
           />

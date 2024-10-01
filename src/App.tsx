@@ -12,12 +12,13 @@ import { BottomNavbar } from "./components/BottomNavbar";
 import { CreateBranchModal } from "./components/ModalCreateBranch";
 import { AddCommitToBranchModal } from "./components/ModalAddCommitToBranch";
 import { MergeBranchModal } from "./components/ModalMergeBranch";
+import { ModalEditCommit } from "./components/ModalEditCommit";
 
 export default function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { graph } = useGitContext();
   const [modalName, setModalName] = React.useState<
-    "createBranch" | "addCommit" | "mergeBranch"
+    "createBranch" | "addCommit" | "mergeBranch" | "editCommit"
   >();
 
   const initialRef = React.useRef<HTMLElement>();
@@ -71,6 +72,9 @@ export default function App() {
           )}
           {modalName === "mergeBranch" && (
             <MergeBranchModal onClose={onClose} initialRef={initialRef} />
+          )}
+          {modalName === "editCommit" && (
+            <ModalEditCommit onClose={onClose} initialRef={initialRef} />
           )}
         </Modal>
       )}
